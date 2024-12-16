@@ -14,7 +14,7 @@
       {
         "type": "CLAS|INTF|TABL",
         "oldName": "z2ui5_(.*)",
-        "newName": "/vno/2412a2ui5_$1"
+        "newName": "/dsn/a2ui5_$1"
       }
     ]
   },
