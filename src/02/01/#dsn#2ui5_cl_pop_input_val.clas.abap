@@ -36,8 +36,6 @@ CLASS /dsn/2ui5_cl_pop_input_val DEFINITION
     DATA question_text          TYPE string.
     DATA button_text_confirm    TYPE string.
     DATA button_text_cancel     TYPE string.
-    DATA check_initialized      TYPE abap_bool.
-    DATA check_result_confirmed TYPE abap_bool.
 
     METHODS view_display.
 
@@ -46,6 +44,7 @@ ENDCLASS.
 
 
 CLASS /dsn/2ui5_cl_pop_input_val IMPLEMENTATION.
+
   METHOD factory.
 
     r_result = NEW #( ).
@@ -90,19 +89,18 @@ CLASS /dsn/2ui5_cl_pop_input_val IMPLEMENTATION.
 
     me->client = client.
 
-    IF check_initialized = abap_false.
-      check_initialized = abap_true.
+    IF client->check_on_init( ).
       view_display( ).
       RETURN.
     ENDIF.
 
     CASE client->get( )-event.
       WHEN `BUTTON_CONFIRM`.
-        check_result_confirmed = abap_true.
+        ms_result-check_confirmed = abap_true.
         client->popup_destroy( ).
         client->nav_app_leave( client->get_app( client->get( )-s_draft-id_prev_app_stack ) ).
       WHEN `BUTTON_CANCEL`.
-        check_result_confirmed = abap_false.
+        ms_result-check_confirmed = abap_false.
         client->popup_destroy( ).
         client->nav_app_leave( client->get_app( client->get( )-s_draft-id_prev_app_stack ) ).
     ENDCASE.

@@ -18,7 +18,7 @@ CLASS /dsn/2ui5_cl_app_manifest_json IMPLEMENTATION.
 
   METHOD get.
 
-    result =              `{` &&
+    result = `{` &&
              `  "_version": "1.65.0",` &&
              `  "sap.app": {` &&
              `    "id": "z2ui5",` &&
@@ -104,7 +104,6 @@ CLASS /dsn/2ui5_cl_app_manifest_json IMPLEMENTATION.
              `      "config": {` &&
              `        "routerClass": "sap.m.routing.Router",` &&
              `        "viewType": "XML",` &&
-             `        "async": true,` &&
              `        "viewPath": "z2ui5.view",` &&
              `        "controlAggregation": "pages",` &&
              `        "controlId": "app",` &&
@@ -146,7 +145,6 @@ CLASS /dsn/2ui5_cl_app_manifest_json IMPLEMENTATION.
              `    "rootView": {` &&
              `      "viewName": "z2ui5.view.App",` &&
              `      "type": "XML",` &&
-             `      "async": true,` &&
              `      "id": "App"` &&
              `    }` &&
              `  },` &&
@@ -155,6 +153,7 @@ CLASS /dsn/2ui5_cl_app_manifest_json IMPLEMENTATION.
              `    "service": "z2ui5"` &&
              `  }` &&
              `}` &&
+             `` &&
               ``.
 
   ENDMETHOD.
