@@ -18,6 +18,10 @@ INTERFACE /dsn/2ui5_if_client
       set_size_limit            TYPE string VALUE `SET_SIZE_LIMIT`,
       set_odata_model           TYPE string VALUE `SET_ODATA_MODEL`,
       urlhelper                 TYPE string VALUE `URLHELPER`,
+      history_back              TYPE string VALUE `HISTORY_BACK`,
+      clipboard_app_state       TYPE string VALUE `CLIPBOARD_APP_STATE`,
+      clipboard_copy            TYPE string VALUE `CLIPBOARD_COPY`,
+      store_data                TYPE string VALUE `STORE_DATA`,
     END OF cs_event.
 
   CONSTANTS:
@@ -33,7 +37,7 @@ INTERFACE /dsn/2ui5_if_client
 
   METHODS view_display
     IMPORTING
-      val                           TYPE clike
+      val                           TYPE any
       switch_default_model_anno_uri TYPE string OPTIONAL
       switch_default_model_path     TYPE string OPTIONAL.
 
@@ -41,7 +45,19 @@ INTERFACE /dsn/2ui5_if_client
 
   METHODS set_session_stateful
     IMPORTING
-      stateful TYPE abap_bool DEFAULT abap_true.
+      val TYPE abap_bool DEFAULT abap_true.
+
+  METHODS set_app_state_active
+    IMPORTING
+      val TYPE abap_bool DEFAULT abap_true.
+
+  METHODS set_push_state
+    IMPORTING
+      val TYPE string OPTIONAL.
+
+  METHODS set_nav_back
+    IMPORTING
+      val TYPE abap_bool DEFAULT abap_true.
 
   METHODS nest_view_display
     IMPORTING
@@ -165,7 +181,7 @@ INTERFACE /dsn/2ui5_if_client
       custom_filter        TYPE REF TO /dsn/2ui5_if_ajson_filter  OPTIONAL
       !tab                 TYPE data                          OPTIONAL
       tab_index            TYPE i                             OPTIONAL
-      switch_Default_Model TYPE abap_bool DEFAULT abap_false
+      switch_default_model TYPE abap_bool DEFAULT abap_false
     RETURNING
       VALUE(result)        TYPE string.
 
@@ -173,7 +189,7 @@ INTERFACE /dsn/2ui5_if_client
     IMPORTING
       val                  TYPE data
       !path                TYPE abap_bool                     DEFAULT abap_false
-      view                 TYPE string                        DEFAULT /dsn/2ui5_if_client=>cs_view-main
+      view                 TYPE string                        DEFAULT cs_view-main
       custom_mapper        TYPE REF TO /dsn/2ui5_if_ajson_mapping OPTIONAL
       custom_mapper_back   TYPE REF TO /dsn/2ui5_if_ajson_mapping OPTIONAL
       custom_filter        TYPE REF TO /dsn/2ui5_if_ajson_filter  OPTIONAL
@@ -181,16 +197,6 @@ INTERFACE /dsn/2ui5_if_client
       !tab                 TYPE data                          OPTIONAL
       tab_index            TYPE i                             OPTIONAL
       switch_default_model TYPE abap_bool DEFAULT abap_false
-    RETURNING
-      VALUE(result)        TYPE string.
-
-  METHODS _bind_local
-    IMPORTING
-      val                  TYPE data
-      !path                TYPE abap_bool                     DEFAULT abap_false
-      custom_mapper        TYPE REF TO /dsn/2ui5_if_ajson_mapping OPTIONAL
-      custom_filter        TYPE REF TO /dsn/2ui5_if_ajson_filter  OPTIONAL
-      switch_default_Model TYPE abap_bool DEFAULT abap_false
     RETURNING
       VALUE(result)        TYPE string.
 

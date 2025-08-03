@@ -80,6 +80,21 @@ CLASS /dsn/2ui5_cl_core_action IMPLEMENTATION.
 
     TRY.
         result = NEW #( mo_http_post ).
+
+        IF mo_http_post->ms_request-s_control-app_start_draft IS NOT INITIAL.
+          TRY.
+
+              DATA(lo_app) = /dsn/2ui5_cl_core_app=>db_load( mo_http_post->ms_request-s_control-app_start_draft ).
+              result->mo_app = lo_app.
+              result->ms_actual-check_on_navigated = abap_true.
+              result->ms_next-s_set-set_app_state_active = abap_true.
+              result->mo_app->ms_draft-id_prev_app_stack = ''.
+              result->mo_app->ms_draft-id = /dsn/2ui5_cl_util=>uuid_get_c32( ).
+              RETURN.
+            CATCH cx_root.
+          ENDTRY.
+        ENDIF.
+
         result->mo_app->ms_draft-id = /dsn/2ui5_cl_util=>uuid_get_c32( ).
 
         CREATE OBJECT result->mo_app->mo_app TYPE (mo_http_post->ms_request-s_control-app_start).
@@ -143,9 +158,13 @@ CLASS /dsn/2ui5_cl_core_action IMPLEMENTATION.
 
     mo_app->db_save( ).
 
-    val->id_draft = COND string( WHEN val->id_draft IS INITIAL
-                                 THEN /dsn/2ui5_cl_util=>uuid_get_c32( )
-                                 ELSE ms_next-o_app_leave->id_draft ).
+    IF val->id_draft IS INITIAL.
+      val->id_draft = /dsn/2ui5_cl_util=>uuid_get_c32( ).
+    ELSEIF ms_next-o_app_leave IS BOUND.
+      val->id_draft = ms_next-o_app_leave->id_draft.
+    ELSE.
+      val->id_draft = ms_next-o_app_call->id_draft.
+    ENDIF.
 
     result = NEW #( mo_http_post ).
     TRY.
@@ -153,6 +172,7 @@ CLASS /dsn/2ui5_cl_core_action IMPLEMENTATION.
       CATCH cx_root.
         result->mo_app->mo_app = val.
     ENDTRY.
+
     result->mo_app->ms_draft-id          = val->id_draft.
 
     result->mo_app->ms_draft-id_prev     = mo_app->ms_draft-id.
